@@ -1,7 +1,7 @@
 variable "aws_region" {
   type        = string
   description = "Region for AWS Resources"
-  default     = "us-east-2"
+  default     = "us-east-1"
 }
 
 variable "instance_type" {
@@ -21,5 +21,5 @@ variable "profile" {
 }
 variable "instance_count" {
   type = number
-  default = "5"
+  default = 5
 }

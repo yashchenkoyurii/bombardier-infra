@@ -89,7 +89,7 @@ resource "aws_instance" "instance" {
     volume_type = "gp3"
   }
 
-  user_data = templatefile("${path.cwd}/bootstrap.sh", {})
+  user_data = file("${path.cwd}/bootstrap.sh")
 
   count = var.instance_count
 
