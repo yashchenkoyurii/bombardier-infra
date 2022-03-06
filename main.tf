@@ -108,7 +108,8 @@ resource "aws_instance" "instance" {
     external_ip : lookup(local.external_ip, "ip"),
     open_vpn : file("${path.cwd}/config.ovpn"),
     db1000n_enabled : var.db1000n_enabled,
-    repeats_num : var.repeats_num
+    repeats_num : var.repeats_num,
+    duration : var.duration
   })
 
   count = var.instance_count

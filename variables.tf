@@ -39,3 +39,8 @@ variable "db1000n_enabled" {
   type    = bool
   default = false
 }
+
+variable "duration" {
+  type = number
+  default = 1800
+}
