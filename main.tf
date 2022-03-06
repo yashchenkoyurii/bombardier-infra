@@ -5,6 +5,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "4.3.0"
     }
+
+    http = {
+      source  = "hashicorp/http"
+      version = "2.1.0"
+    }
   }
 }
 
@@ -17,6 +22,8 @@ locals {
   common_tags = {
     ManagedBy = "terraform"
   }
+
+  external_ip = jsondecode(data.http.my_public_ip.body)
 }
 
 #DATA SOURCES
@@ -39,6 +46,13 @@ data "aws_ami" "ami" {
   }
 
   owners = ["099720109477"]
+}
+
+data "http" "my_public_ip" {
+  url             = "https://ifconfig.co/json"
+  request_headers = {
+    Accept = "application/json"
+  }
 }
 
 #RESOURCES
@@ -89,7 +103,13 @@ resource "aws_instance" "instance" {
     volume_type = "gp3"
   }
 
-  user_data = file("${path.cwd}/bootstrap.sh")
+  user_data = templatefile("${path.cwd}/bootstrap.tftpl", {
+    targets : var.targets,
+    external_ip : lookup(local.external_ip, "ip"),
+    open_vpn : file("${path.cwd}/config.ovpn"),
+    db1000n_enabled : var.db1000n_enabled,
+    repeats_num : var.repeats_num
+  })
 
   count = var.instance_count
 

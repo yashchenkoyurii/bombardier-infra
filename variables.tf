@@ -19,7 +19,23 @@ variable "profile" {
   type    = string
   default = "terraform"
 }
+
 variable "instance_count" {
-  type = number
+  type    = number
   default = 5
+}
+
+variable "targets" {
+  type    = list(string)
+  default = []
+}
+
+variable "repeats_num" {
+  type    = number
+  default = 3
+}
+
+variable "db1000n_enabled" {
+  type    = bool
+  default = false
 }
