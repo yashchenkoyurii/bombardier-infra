@@ -1,0 +1,21 @@
+#!/bin/bash
+
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo chown ${user} /var/run/docker.sock
+
+docker pull ghcr.io/arriven/db1000n
+
+sudo apt-get install -y openvpn net-tools
+sudo route add -host ${external_ip} gw $(/sbin/ip route | awk '/default/ { print $3 }')
+
+cat <<EOF > /etc/openvpn/config.ovpn
+    ${open_vpn}
+EOF
+
+cd /etc/openvpn && \
+    screen -m -d sudo openvpn --config "config.ovpn"
+
+sleep 5
+
+docker run -d ghcr.io/arriven/db1000n
