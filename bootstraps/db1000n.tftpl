@@ -16,6 +16,4 @@ EOF
 cd /etc/openvpn && \
     screen -m -d sudo openvpn --config "config.ovpn"
 
-sleep 10
-
 docker run -d ghcr.io/arriven/db1000n

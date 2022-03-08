@@ -16,6 +16,4 @@ EOF
 cd /etc/openvpn && \
     screen -m -d sudo openvpn --config "config.ovpn"
 
-sleep 10
-
 docker run -d alpine/bombardier -c 1000 -d ${duration}s -l ${target}
