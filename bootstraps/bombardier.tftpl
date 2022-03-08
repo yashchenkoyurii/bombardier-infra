@@ -2,12 +2,9 @@
 
 sudo apt-get update
 sudo apt-get install -y docker.io
-sudo chmod 666 /var/run/docker.sock
-
-sleep 2
+sudo chown ${user} /var/run/docker.sock
 
 docker pull alpine/bombardier
-docker pull ghcr.io/arriven/db1000n
 
 sudo apt-get install -y openvpn net-tools
 sudo route add -host ${external_ip} gw $(/sbin/ip route | awk '/default/ { print $3 }')
@@ -19,11 +16,6 @@ EOF
 cd /etc/openvpn && \
     screen -m -d sudo openvpn --config "config.ovpn"
 
-for i in {1..${repeats_num}}; do
-  %{ for target in targets ~}
+sleep 5
+
 docker run -d alpine/bombardier -c 1000 -d ${duration}s -l ${target}
-  %{ endfor ~}
-  %{ if db1000n_enabled == true}
-docker run -d ghcr.io/arriven/db1000n
-  %{ endif }
-done
