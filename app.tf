@@ -90,11 +90,11 @@ module "ec2_bombardier" {
 
   user_data = templatefile("${path.cwd}/bootstraps/bombardier.tftpl", {
     external_ip : lookup(local.external_ip, "ip"),
-    open_vpn : format(
+    open_vpn : file(format(
       "%s/ovpn/%s",
       path.cwd,
       local.vpn_files[module.ovpn_bombardier.numbers[index(var.targets, each.key)]]
-    ),
+    )),
     duration : var.duration,
     target : each.value,
     user : var.instance_user
@@ -113,11 +113,11 @@ module "ec2_db100n" {
 
   user_data = templatefile("${path.cwd}/bootstraps/db1000n.tftpl", {
     external_ip : lookup(local.external_ip, "ip"),
-    open_vpn : format(
+    open_vpn : file(format(
       "%s/ovpn/%s",
       path.cwd,
       local.vpn_files[module.ovpn_db1000n.numbers[each.key]]
-    ),
+    )),
     user : var.instance_user
   })
 
